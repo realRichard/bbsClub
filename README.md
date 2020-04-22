@@ -1,4 +1,4 @@
-<div align=center>![Ask](https://github.com/realRichard/bbsClub/blob/master/pictures/1170859.gif "Ask")
+<center>![Ask](https://github.com/realRichard/bbsClub/blob/master/pictures/1170859.gif "Ask")</center>
 
 #   **bbsClub**
 
