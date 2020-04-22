@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bbs club专业的问答社区</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- navbar -->
+    <div class='navbar'>
+        <div class='navbar-inner'>
+        <div class='container'>
+            <a class='brand' href="{{ url_for('index.index') }}">
+                <img style="HEIGHT: inherit" src="{{ url_for('static', filename='1170859.gif') }}" />
+            </a>
+            <!-- call google search -->
+            <form id='search_form' class='navbar-search' action="http://www.google.com/search">
+                <input type='text' id='q' name='q' class='search-query span3' value=''/>
+            </form>
+            <ul class='nav pull-right'>
+                <li><a href="{{ url_for('index.index') }}">首页</a></li>
+                
+                <li><a href='/getstart'>新手入门</a></li>
+                <li><a href='/api'>API</a></li>
+                
+                <li><a href="/about" target="">关于</a></li>
+                
+                <li><a href="{{ url_for('auth.index') }}">注册</a></li>
+                <li><a href="{{ url_for('auth.index') }}">登录</a></li>
+            </ul>
+            <a class="btn btn-navbar" id="responsive-sidebar-trigger">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+        </div>
+    </div>
+    <div id="main">
+        <div id="content">
+            <div>
+                <h2>{{ mail.title }}</h2>
+                <div>
+                    <span>
+                        {{ mail.format_ct() }}
+                    </span>
+                    <span>
+                        {% if mail.receiver_id == user.id %}
+                            from {{ user.find_by(id=mail.sender_id).username }}
+                        {% else %}
+                            to {{ user.find_by(id=mail.receiver_id).username }}
+                        {% endif %}
+                    </span>
+                    <span>
+                        {% if mail.check%}
+                            已读
+                        {% else %}
+                            未读
+                        {% endif %}
+                    </span>
+                </div>
+                <div>
+                    {{ mail.content }}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>bbs club专业的问答社区</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/lib/editor/editor.css">
+    <link rel="stylesheet" href="/static/lib/webuploader/webuploader.css">
+    <script src="/static/lib/jquery-3.0.0.min.js"></script>
+    <script src="/static/lib/markdownit.js"></script>
+    <script src="/static/lib/webuploader/webuploader.withoutimage.js"></script>
+    <script src="/static/lib/editor/editor.js"></script>
+    <script src="/static/lib/editor/ext.js"></script>
+</head>
+<body>
+    <!-- navbar -->
+    <div class='navbar'>
+        <div class='navbar-inner'>
+        <div class='container'>
+            <a class='brand' href="{{ url_for('index.index') }}">
+                <img style="HEIGHT: inherit" src="{{ url_for('static', filename='1170859.gif') }}" />
+            </a>
+            <!-- call google search -->
+            <form id='search_form' class='navbar-search' action="http://www.google.com/search">
+                <input type='text' id='q' name='q' class='search-query span3' value=''/>
+            </form>
+            <ul class='nav pull-right'>
+                <li><a href="{{ url_for('index.index') }}">首页</a></li>
+                
+                <li><a href='/getstart'>新手入门</a></li>
+                <li><a href='/api'>API</a></li>
+                
+                <li><a href="/about" target="">关于</a></li>
+                
+                <li><a href="{{ url_for('auth.index') }}">注册</a></li>
+                <li><a href="{{ url_for('auth.index') }}">登录</a></li>
+            </ul>
+            <a class="btn btn-navbar" id="responsive-sidebar-trigger">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+        </div>
+    </div>
+    <div id="main">
+        <div id="sidebar">
+            <div class="panel">
+                <div class="inner">
+                    <a href="{{ url_for('post.new') }}" class="create_topic_btn">
+                        <span class="span-success">发布话题</span>
+                    </a>
+                </div>
+            </div>
+            <div class='panel'>
+                <div class='header'>
+                    <span class='col_fade'>无人回复的话题</span>
+                </div>
+                <div class='inner'>
+                    <ul class="unstyled">
+                        {% for p in unreplied_posts %}
+                        <li>
+                            <div>
+                                <a class='dark topic_title' href="{{ url_for('post.detail', id=p.id) }}" title="{{ p.title }}">{{ p.title }}</a>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="content">
+            <div class="panel">
+                <div class="header">
+                    <a href="{{ url_for('.index') }}"class="topic-tab">全部</a>
+                    {% for b in boards%}
+                    <a href="{{ url_for('.index', tab=b.name) }}"class="topic-tab"> {{ b.name }} </a>
+                    <!-- do't hard code -->
+                    <!-- <a href="/?tab={{ b.name }}"class="topic-tab"> {{ b.name }} </a> -->
+                    {% endfor %}
+                </div>
+                <div class="inner post">
+                    {% if data | count == 0 %}
+                        <p>无话题</p>
+                    {% else %}
+                        <div class="topic_list">
+                        {% for p in data %}
+                            <div class="cell">
+                                <a class="user_avatar pull-left" href="{{ url_for('user.index', username=p.user().username ) }}">
+                                    <img src="{{ url_for('user.headportrait', u_id=p.user().id) }}" title="{{ p.user().username}}"/>
+                                </a>
+                                <span class="reply_count pull-left">
+                                    <span class="count_of_replies" title="回复数">
+                                        {{ p.replies() | length }}
+                                    </span>
+                                    <span class="count_seperator">/</span>
+                                    <span class="count_of_visits" title='点击数'>
+                                        {{ p.views }}
+                                    </span>
+                                </span>
+                                <span class='last_time pull-right'>
+                                    <span class="last_active_time"> {{ p.format_ct() }} </span>
+                                </span>
+                                <div class="topic_title_wrapper">
+                                    {% if p.top == true %}
+                                        <span class='put_top'>置顶</span>
+                                    {% else %}
+                                        <span class='topiclist-tab'> {{ p.board().name }} </span>
+                                    {% endif %}
+                                    <a class="topic_title" href="{{ url_for('post.detail', id=p.id) }}">
+                                        {{ p.title }}
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                        <div class='pagination' current_page='{{ page.current_page }}'>
+                        <ul>
+                            <li><a href="{{ url_for('.index', tab=request.args.get('tab', '全部'), page=1) }}">«</a></li>
+                            <!-- do not hard code is much better -->
+                            <!-- <li><a href="/?tab={{ request.args.get('tab', '全部') }}&page=1">«</a></li> -->
+                            {% if page.previous_page() %}
+                            <li><a href="{{ url_for('.index', tab=request.args.get('tab', '全部'), page=page.previous_page()) }}">{{ page.previous_page() }}</a></li>
+                            <!-- <li><a href="/?tab={{ request.args.get('tab', '全部') }}&page={{ page.previous_page() }}">{{ page.previous_page() }}</a></li> -->
+                            {% else %}
+                            <li><a>...</a></li>
+                            {% endif %}
+
+                            <li><a href="{{ url_for('.index', tab=request.args.get('tab', '全部'), page=page.current_page) }}">{{ page.current_page }}</a></li>
+                            <!-- <li><a href="/?tab={{ request.args.get('tab', '全部') }}&page={{ page.current_page }}">{{ page.current_page }}</a></li> -->
+                            
+                            {% if page.next_page() %}
+                            <li><a href="{{ url_for('.index', tab=request.args.get('tab', '全部'), page=page.next_page()) }}">{{ page.next_page() }}</a></li>
+                            <!-- <li><a href="/?tab={{ request.args.get('tab', '全部') }}&page={{ page.next_page() }}">{{ page.next_page() }}</a></li> -->
+                            {% else %}
+                            <li><a>...</a></li>
+                            {% endif %}
+                            <li><a href="{{ url_for('.index', tab=request.args.get('tab', '全部'), page=page.total_page) }}">»</a></li>
+                            <!-- <li><a href="/?tab={{request.args.get('tab', '全部')}}&page={{ page.total_page }}">»</a></li> -->
+                        </ul>
+                        </div>
+                    {% endif %}
+                    <script>
+                        $(document).ready(function () {
+                        var $nav = $('.pagination');
+                        var current_page = $nav.attr('current_page');
+                        if (current_page) {
+                            $nav.find('li').each(function () {
+                            var $li = $(this);
+                            var $a = $li.find('a');
+                            if ($a.html() == current_page) {
+                                $li.addClass('active');
+                                $a.removeAttr('href');
+                            }
+                            });
+                        }
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    (function () {
+    var editor = new Editor();
+    editor.render($('.editor')[0]);
+    })();
+</script>
+</body>
+</html>

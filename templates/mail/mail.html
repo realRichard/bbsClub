@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bbs club专业的问答社区</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- navbar -->
+    <div class='navbar'>
+        <div class='navbar-inner'>
+        <div class='container'>
+            <a class='brand' href="{{ url_for('index.index') }}">
+                <img style="HEIGHT: inherit" src="{{ url_for('static', filename='1170859.gif') }}" />
+            </a>
+            <!-- call google search -->
+            <form id='search_form' class='navbar-search' action="http://www.google.com/search">
+                <input type='text' id='q' name='q' class='search-query span3' value=''/>
+            </form>
+            <ul class='nav pull-right'>
+                <li><a href="{{ url_for('index.index') }}">首页</a></li>
+                
+                <li><a href='/getstart'>新手入门</a></li>
+                <li><a href='/api'>API</a></li>
+                
+                <li><a href="/about" target="">关于</a></li>
+                
+                <li><a href="{{ url_for('auth.index') }}">注册</a></li>
+                <li><a href="{{ url_for('auth.index') }}">登录</a></li>
+            </ul>
+            <a class="btn btn-navbar" id="responsive-sidebar-trigger">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+        </div>
+    </div>
+    <div id="main">
+        <div id="content">
+            <div>
+                <h2>发私信</h2>
+                <form role="form" action="{{ url_for('.send') }}", method="POST">
+                    <div class="form-group">
+                        <label for="name">title</label>
+                        <input type="text" class="form-control" name="title" placeholder="title">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">content</label>
+                        <textarea class="form-control" name="content" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">@</label>
+                        <input type="text" class="form-control" name="receiver_id" placeholder="接受者 ID">
+                    </div>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-default">send</button>
+                </form>
+            </div>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            <div>
+                <h2>收到的私信</h2>
+                <ul class="list-group">
+                    {% for m in received_mail %}
+                    <li class="list-group-item">
+                        <span>
+                            {{ m.format_ct() }}
+                        </span>
+                        <a href="{{ url_for('.detail', id=m.id) }}" title="{{ m.title}}">{{ m.title }}</a>
+                        {% if m.check == True %}
+                            <span>已读</span>
+                        {% else %}
+                            <span>未读</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <h2>发出的私信</h2>
+                <ul class="list-group">
+                    {% for m in sent_mail %}
+                    <li class="list-group-item">
+                        <span>
+                            {{ m.format_ct() }}
+                        </span>
+                        <a href="{{ url_for('.detail', id=m.id) }}" title="{{ m.title}}">{{ m.title }}</a>
+                        {% if m.check == True %}
+                            <span>已读</span>
+                        {% else %}
+                            <span>未读</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
