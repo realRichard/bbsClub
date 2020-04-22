@@ -6,6 +6,11 @@
 
 ***
 
+<p align="left">
+    <a href='https://www.python.org/'><img src='https://github.com/realRichard/bbsClub/blob/master/pictures/download.jpeg' alt="python"></a>  
+    <a href='https://flask.palletsprojects.com/en/1.1.x/'><img src='https://github.com/realRichard/bbsClub/blob/master/pictures/download.png alt="flask"></a>
+</p>
+
 
 
 
