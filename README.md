@@ -1,4 +1,4 @@
-![Ask](https://github.com/realRichard/bbsClub/blob/master/pictures/1170859.gif "Ask")
+<div align=center>![Ask](https://github.com/realRichard/bbsClub/blob/master/pictures/1170859.gif "Ask")
 
 #   **bbsClub**
 
@@ -42,10 +42,10 @@
 ![send_and_receive_private_letters](https://github.com/realRichard/bbsClub/blob/master/pictures/5.png "send_and_receive_private_letters")
 
 6. private letter detail
-![private_letter_detail](https://github.com/realRichard/bbsClub/blob/master/pictures/6.png "private_letter_detail")
+![private_letter_detail](https://github.com/realRichard/bbsClub/blob/master/pictures/7.png "private_letter_detail")
 
 7. admin manage board
-![administrator_manage_board](https://github.com/realRichard/bbsClub/blob/master/pictures/7.png "administrator_manage_board")
+![administrator_manage_board](https://github.com/realRichard/bbsClub/blob/master/pictures/6.png "administrator_manage_board")
 
 
 
