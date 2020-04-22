@@ -29,7 +29,7 @@
 1. index 
 ![index](https://github.com/realRichard/bbsClub/blob/master/pictures/1.png "index")
 
-    2. add new post
+2. add new post
 ![new_post](https://github.com/realRichard/bbsClub/blob/master/pictures/2.png "add_new_post")
 
 3. post detail and replies
