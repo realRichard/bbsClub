@@ -66,4 +66,10 @@
 
 -   In the last, supposing that no one in our community can solve your problem, it seems we have to call google search to serve you.
 
+***
 
+##  **Security**
+
+-   Our site is already getting CSRF protection.
+
+-   Flask configures Jinja2 to automatically escape all values. We do't worry Cross-Site Scripting (XSS).
