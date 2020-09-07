@@ -20,7 +20,7 @@ main = Blueprint('index', __name__)
 def index():
     boards = Board.all()
     # you can set the quantity of unreplied_post by list slicing
-    unreplied_posts = [p for p in Post.all() if len(p.replies()) == 0]
+    unreplied_posts = [p for p in Post.cache_all() if len(p.replies()) == 0]
     board_name = request.args.get('tab', '全部')
     # current_page is str passed from url
     # page 1 by default
@@ -29,7 +29,7 @@ def index():
         # top_posts = Post.find_all(top=True)
         # ordinary_posts = Post.find_all(top=False)
         # for performance
-        ordinary_posts = Post.all()
+        ordinary_posts = Post.cache_all()
         top_posts = find_all_and_separate(ordinary_posts, top=True)
         top_posts = sorted(top_posts, key=lambda post: post.ct, reverse=True)
         ordinary_posts = sorted(ordinary_posts, key=lambda post: post.ct, reverse=True)
@@ -46,6 +46,7 @@ def index():
             top_posts = sorted(top_posts, key=lambda post: post.ct, reverse=True)
             ordinary_posts = sorted(ordinary_posts, key=lambda post: post.ct, reverse=True)
             sorted_posts = top_posts + ordinary_posts
+            # print('sorted_posts', len(sorted_posts))
         else:
             # in order to keep the consistency down here
             # we give the sorted_posts empty list
